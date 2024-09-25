@@ -9,28 +9,43 @@ class Game:
         self.natives = -20
         self.dist = 20
         self.canteen = 3
-        self.oasis = None
+        self.end = False
+        self.status = False
         
 
-    def actual_d(self):
+    def update(self):
         self.dist = self.player['miles'] - self.natives
+
+        if self.dist <= 0 or self.player['thirst'] > 6 or self.player['miles'] >= 200 or self.player['tired'] > 8:
+            self.end = True
+
+        if self.player['thirst'] > 4 or self.player['tired'] > 5 or self.dist <= 15:
+            self.status = True
+        else:
+            self.status = False
 
 
     def oasis_r(self, r0):
-
-        # print(r0)
-
         if r0 == 20:
             self.canteen = 3   
+            self.status = False
+            
             for i in self.player:
                 if i != "miles":
                     self.player[i] = 0
 
-            print('You found an oasis!')
+            return True
+
+
+    def cont(self, txt, over):
+        if over:
+            return f'{txt['screen'][1]}' 
+        else:
+            return f'{txt['screen'][0]}' 
 
 
     def check(self, txt):
-        if self.dist <= 0 or self.player['thirst'] > 6 or self.player['miles'] >= 200 or self.player['tired'] > 8:
+        if self.end:
             if self.player['miles'] >= 200:  
                 print(txt['win'])
 
@@ -43,7 +58,6 @@ class Game:
             elif self.player['thirst'] > 6:
                 print(txt['thirst'][1])
 
-            input(txt['screen'][1])
             return True
         
         else:
@@ -53,11 +67,9 @@ class Game:
             if self.player['tired'] > 5:
                 print(txt['tired'][0])
 
-            if self.dist < 15:
+            if self.dist <= 15:
                 print(txt['dist'][0])
 
-            self.oasis = None
-            input(txt['screen'][0])
             return False
 
 
@@ -66,41 +78,45 @@ class Game:
             self.canteen -= 1
             self.player['thirst'] = 0
 
-            print(f'drinks left: {self.canteen}')
+            return f'drinks left: {self.canteen}'
         else:
-            print('no drinks left')
+            return 'no drinks left'
 
 
-    def b(self, r0, r1):
+    def b(self, r0, r1, oasis):
         self.player['miles'] += r0
         self.player['thirst'] += 1
         self.player['tired'] += 1
         self.natives += r1
-        self.oasis = True
-
-        print(f'you traveled {r0} miles.')
+        o = self.oasis_r(oasis)
+        if o:
+            return f'you traveled {r0} miles. \nYou found an oasis!'
+        else:
+            return f'you traveled {r0} miles.'
         
     
-    def c(self, r0, r1, r2):
+    def c(self, r0, r1, r2, oasis):
         self.player['miles'] += r0
         self.player['thirst'] += 1
         self.player['tired'] += r2
         self.natives += r1
-        self.oasis = True
-
-        print(f'you traveled {r0} miles.')  
+        o = self.oasis_r(oasis)
+        if o:
+            return f'you traveled {r0} miles. \nYou found an oasis!'
+        else:
+            return f'you traveled {r0} miles.'
     
 
     def d(self, r0):
         self.player['tired'] = 0
         self.natives += r0
 
-        print('The camel is happy (rest)')
+        return 'The camel is happy (rest)'
 
 
     def e(self):
 
-        # print(f'{self.player}\n {self.natives}\n {self.dist}')
-        
-        print(f'Miles traveled:  {self.player['miles']}\nDrinks in canteen:  {self.canteen}\nThe natives are {self.dist} miles behind you.')
+        # return f'{self.player}\n {self.natives}\n {self.dist}\nMiles traveled:  {self.player['miles']}\nDrinks in canteen:  {self.canteen}\nThe natives are {self.dist} miles behind you.'
+
+        return f'Miles traveled:  {self.player['miles']}\nDrinks in canteen:  {self.canteen}\nThe natives are {self.dist} miles behind you.'
     

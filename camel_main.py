@@ -7,43 +7,63 @@ from text import intro, menu, choice, txt
 def main():
     done = False
     print(intro)
-    
+
+
     while not done:
         r = random.randint
-        print(f'{menu}\n')
-        ask = input(choice)
-        
-        if ask.upper() == "Q":
-            break
+        oasis = (r(1, 20))
+        ans = None
 
-        elif ask.upper() == "A":
-            game.a()
+        while True:
+            print(f'{menu}\n')
+            ask = input(choice)
+                
+            if ask.upper() == "Q":
+                break
 
-        elif ask.upper() == "B":
-            game.b(r(5, 12), r(7, 14))
+            elif ask.upper() == "A":
+                ans = game.a()
 
-        elif ask.upper() == "C":
-            game.c(r(10, 20), r(7, 14), r(1, 3))
+            elif ask.upper() == "B":
+                ans = game.b(r(5, 12), r(7, 14), oasis)
 
-        elif ask.upper() == "D":
-            game.d(r(7, 14))
-        
-        elif ask.upper() == "E":
-            game.e()
+            elif ask.upper() == "C":
+                ans = game.c(r(10, 20), r(7, 14), 4, oasis)
 
+            elif ask.upper() == "D":
+                ans = game.d(r(7, 14))
+                
+            elif ask.upper() == "E":
+                ans = game.e()
+
+            else:
+                os.system('clear')
+                continue
+
+            if ans:
+                break
+
+
+        game.update()
+
+        os.system('clear')
+
+        if ans:
+            print(ans)
+            input(game.cont(txt, False))
         else:
-            print('Error')
+            break
+    
 
-
-        game.actual_d()
-
-        if game.oasis:
-            game.oasis_r(r(1, 20))
+        os.system('clear')
 
         done = game.check(txt)
+        if game.status:
+            input(game.cont(txt, done))
+            
         os.system('clear')
         
-        
+
 game = Game()
 main()
 
