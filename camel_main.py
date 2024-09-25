@@ -28,7 +28,7 @@ def main():
                 ans = game.b(r(5, 12), r(7, 14), oasis)
 
             elif ask.upper() == "C":
-                ans = game.c(r(10, 20), r(7, 14), (1, 3), oasis)
+                ans = game.c(r(10, 20), r(7, 14), r(1, 3), oasis)
 
             elif ask.upper() == "D":
                 ans = game.d(r(7, 14))
